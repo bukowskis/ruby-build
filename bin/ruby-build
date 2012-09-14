@@ -212,7 +212,9 @@ build_package_ree_installer() {
   # Work around install_useful_libraries crash with --dont-install-useful-gems
   mkdir -p "$PREFIX_PATH/lib/ruby/gems/1.8/gems"
 
-  { ./installer --auto "$PREFIX_PATH" --dont-install-useful-gems $options $CONFIGURE_OPTS
+  # See http://code.google.com/p/rubyenterpriseedition/issues/detail?id=74
+  { sed -i 's/__memalign_hook/ volatile __memalign_hook/g' source/distro/google-perftools-1.7/src/tcmalloc.cc
+    ./installer --auto "$PREFIX_PATH" --dont-install-useful-gems $options $CONFIGURE_OPTS
   } >&4 2>&1
 }
 
